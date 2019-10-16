@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\james.schulze\source\repos\farkle\farkle\obj\Debug\
+C:\Users\Home\OneDrive\Desktop\farkle-master\farkle\obj\Debug\
 farkle
 none
 false
 DEBUG;TRACE
-C:\Users\james.schulze\source\repos\farkle\farkle\App.xaml
-11151548125
+C:\Users\Home\OneDrive\Desktop\farkle-master\farkle\App.xaml
+32044786038
 
-12-520407346
-131569487696
-MainWindow.xaml;
+11483257056
+14434534373
+MainMenu.xaml;MainWindow.xaml;Scoring.xaml;
 
-False
+True
 
