@@ -3,6 +3,9 @@
 //     Copyright (c) Ian Burroughs, Mike Boudreau, Brandon Biles & James A. Schulze. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
+
+using System.Windows;
+
 namespace farkle
 {
     using System;
@@ -59,10 +62,13 @@ namespace farkle
         public int ScoreDice()
         {
             // Variable for total score from the dice roll.
-            int totalScore;
+            int totalScore = 0;
             // Scoring 
 
-            List<int> diceKept;
+            // Set up a list to store the diceKept in.
+            List<int> diceKept = new List<int>();
+
+            // Set up variables to hold the scores for a single 1 or single 5 rolled.
             int die1 = 100;
             int die5 = 50;
 
@@ -73,8 +79,20 @@ namespace farkle
             int fourCounter = 0;
             int fiveCounter = 0;
             int sixCounter = 0;
+
+            // Set up a bool value to hold true if all 6 dice are kept.
             bool hotDice = false;
 
+            // todo Set up a bool value to hold true if there are dice that can be scored?
+            // bool scoreableDice = true;
+
+            // todo set up a way to tell if there are scoreable dice.
+            // todo list of dice that arent being kept.
+            // List<int> rolledDice = new List<int>();
+
+
+            // todo not sure what was going here.
+            // If 
             if (hotDice == false)
             {
                 this.pendingScore = 0;
@@ -84,20 +102,24 @@ namespace farkle
 
             }
 
+            // If there is only one dice kept.
             if (diceKept.Count == 1)
             {
-                if (diceKept[] == 1)
+                // If the dice kept is a 1.
+                if (diceKept[0] == 1)
                 {
+                    // Add 100 to pendingScore.
                     pendingScore = die1;
                 }
                 else
                 {
+                    // The dice kept is a 5. Add 50 to the pendingScore.
                     pendingScore = die5;
                 }
             }
             else
             {
-                // Two of the dice have been kept.
+                // Loop through the diceKept list and increment the counters of each die rolled.
                 foreach (int die in diceKept)
                 {
                     // If the current die is a 1.
@@ -136,42 +158,43 @@ namespace farkle
                 // Loop through the oneCounter and adjust scores.
                 for (int i = 0; i <= oneCounter; i++)
                 {
+                    // If there are less than 3 ones rolled.
                     if (i < 3)
                     {
                         // Add 100 for each one rolled.
                         pendingScore += 100;
                     }
-                    else if (i == 3)
+                    else
                     {
-                        // If oneCounter is 3 add 1000.
-                        pendingScore = 1000;
-                    }
-                    else if (i == 4)
-                    {
-                        // If oneCounter is 4 add 2000.
-                        pendingScore = 2000;
-                    }
-                    else if (i == 5)
-                    {
-                        // If oneCounter is 5 add 4000.
-                        pendingScore = 4000;
-                    }
-                    else 
-                    {
-                        // If oneCounter is 6 add 8000.
-                        pendingScore = 8000;
+                        // If there are 3 or more ones rolled.
+                        if (i == 3)
+                        {
+                            // If oneCounter is 3 add 1000.
+                            pendingScore += 1000;
+                        }
+                        else if (i == 4)
+                        {
+                            // If oneCounter is 4 add 2000.
+                            pendingScore += 2000;
+                        }
+                        else if (i == 5)
+                        {
+                            // If oneCounter is 5 add 4000.
+                            pendingScore += 4000;
+                        }
+                        else
+                        {
+                            // If oneCounter is 6 add 8000.
+                            pendingScore += 8000;
+                        }
                     }
                 }
 
                 // Loop through the twoCounter and adjust scores.
                 for (int i = 0; i <= twoCounter; i++)
                 {
-                    if (i < 3)
-                    {
-                        // If twoCounter is less than 2 add 0 to pending score.
-                        pendingScore += 0;
-                    }
-                    else if (i == 3)
+                    // If there are 3 or more twos rolled.
+                    if (i == 3)
                     {
                         // If twoCounter is 3 add 200.
                         pendingScore = 200;
@@ -186,7 +209,7 @@ namespace farkle
                         // If twoCounter is 5 add 800.
                         pendingScore = 800;
                     }
-                    else if (i == 6)
+                    else
                     {
                         // If twoCounter is 6 add 1600.
                         pendingScore = 1600;
@@ -196,109 +219,425 @@ namespace farkle
                 // Loop through the threeCounter and adjust scores.
                 for (int i = 0; i <= threeCounter; i++)
                 {
-                    if (i < 3)
+                    // If there are 3 or more threes rolled.
+                    if (i == 3)
                     {
-                        pendingScore = 0;
-                    }
-                    else if (i == 3)
-                    {
-                        pendingScore = 300;
+                        // If threeCounter is 3 add 300.
+                        pendingScore += 300;
                     }
                     else if (i == 4)
                     {
-                        pendingScore = 600;
+                        // If threeCounter is 4 add 600.
+                        pendingScore += 600;
                     }
                     else if (i == 5)
                     {
-                        pendingScore = 1200;
+                        // If threeCounter is 5 add 1200.
+                        pendingScore += 1200;
                     }
-                    else if (i == 6)
+                    else
                     {
-                        pendingScore = 2400;
+                        // If threeCounter is 6 add 2400.
+                        pendingScore += 2400;
                     }
                 }
 
                 // Loop through the fourCounter and adjust scores.
                 for (int i = 0; i <= fourCounter; i++)
                 {
-                    if (i < 3)
+                    // If there are 3 or more fours rolled.
+                    if (i == 3)
                     {
-                        pendingScore = 0;
-                    }
-                    else if (i == 3)
-                    {
-                        pendingScore = 400;
+                        // If fourCounter is 3 add 400.
+                        pendingScore += 400;
                     }
                     else if (i == 4)
                     {
-                        pendingScore = 800;
+                        // If fourCounter is 4 add 800.
+                        pendingScore += 800;
                     }
                     else if (i == 5)
                     {
-                        pendingScore = 1600;
+                        // If fourCounter is 5 add 1600.
+                        pendingScore += 1600;
                     }
-                    else if (i == 6)
+                    else
                     {
-                        pendingScore = 3200;
+                        // If fourCounter is 6 add 3200.
+                        pendingScore += 3200;
                     }
                 }
 
                 // Loop through the fiveCounter and adjust scores.
                 for (int i = 0; i <= fiveCounter; i++)
                 {
+                    // If there are less than 3 fives rolled.
                     if (i < 3)
                     {
+                        // Add 50 for each 5 rolled.
                         pendingScore += 50;
                     }
-                    else if (i == 3)
+                    else
                     {
-                        pendingScore = 500;
-                    }
-                    else if (i == 4)
-                    {
-                        pendingScore = 1000;
-                    }
-                    else if (i == 5)
-                    {
-                        pendingScore = 2000;
-                    }
-                    else if (i == 6)
-                    {
-                        pendingScore = 4000;
+                        // If there are 3 or more fives rolled.
+                        if (i == 3)
+                        {
+                            // If fiveCounter is 3 add 500.
+                            pendingScore += 500;
+                        }
+                        else if (i == 4)
+                        {
+                            // If fiveCounter is 4 add 1000.
+                            pendingScore += 1000;
+                        }
+                        else if (i == 5)
+                        {
+                            // If fiveCounter is 5 add 2000.
+                            pendingScore += 2000;
+                        }
+                        else
+                        {
+                            // If fiveCounter is 6 add 4000.
+                            pendingScore += 4000;
+                        }
                     }
                 }
 
                 // Loop through the sixCounter and adjust scores.
                 for (int i = 0; i <= sixCounter; i++)
                 {
-                    if (i < 3)
+                    // If there are 3 or more sixes rolled.
+                    if (i == 3)
                     {
-                        pendingScore = 0;
-                    }
-                    else if (i == 3)
-                    {
-                        pendingScore = 600;
+                        // If sixCounter is 3 add 600.
+                        pendingScore += 600;
                     }
                     else if (i == 4)
                     {
-                        pendingScore = 1200;
+                        // If sixCounter is 4 add 1200.
+                        pendingScore += 1200;
                     }
                     else if (i == 5)
                     {
-                        pendingScore = 2400;
+                        // If sixCounter is 5 add 2400.
+                        pendingScore += 2400;
                     }
-                    else if (i == 6)
+                    else
                     {
-                        pendingScore = 4800;
+                        // If sixCounter is 6 add 4800.
+                        pendingScore += 4800;
                     }
                 }
 
+                // Check to see if the player rolled a straight or three pairs.
+                if (diceKept.Count == 6)
+                {
+                    // Set hotDice to true.
+                    hotDice = true;
+
+                    // Set up bool values to hold true if counters are pairs.
+                    bool pairOnes = false;
+                    bool pairTwos = false;
+                    bool pairThrees = false;
+                    bool pairFours = false;
+                    bool pairFives = false;
+                    bool pairSixes = false;
+
+                    // Set up a bool value to hold true if there are three pairs.
+                    bool threePairs = false;
+
+                    // Check for pairs.
+                    // If theres a pair of ones.
+                    if (oneCounter == 2)
+                    {
+                        // Set pairOnes as true.
+                        pairOnes = true;
+                    }
+
+                    // If theres a pair of twos.
+                    if (twoCounter == 2)
+                    {
+                        // Set pairTwos as true.
+                        pairTwos = true;
+                    }
+
+                    // If theres a pair of threes.
+                    if (threeCounter == 2)
+                    {
+                        // Set pairThrees as true.
+                        pairThrees = true;
+                    }
+
+                    // If theres a pair of fours.
+                    if (fourCounter == 2)
+                    {
+                        // Set pairFours as true.
+                        pairFours = true;
+                    }
+
+                    // If theres a pair of fives.
+                    if (fiveCounter == 2)
+                    {
+                        // Set pairFives as true.
+                        pairFives = true;
+                    }
+
+                    // If theres a pair of sixes.
+                    if (sixCounter == 2)
+                    {
+                        // Set pairSixes as true.
+                        pairSixes = true;
+                    }
+
+                    // Check for a straight.
+                    if (oneCounter == 1 && twoCounter == 1 && threeCounter == 1 &&
+                        fourCounter == 1 && fiveCounter == 1 && sixCounter == 1)
+                    {
+                        // Add 3000 to the pending score for a straight.
+                        pendingScore = 3000;
+                    }
+                    else
+                    {
+                        // Check for three pairs.
+                        // If theres a pair of ones.
+                        if (pairOnes)
+                        {
+                            // Check if theres another pair.
+                            if (pairTwos)
+                            {
+                                // Check if theres a third pair.
+                                if (pairThrees)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairFours)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairFives)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else if (pairThrees)
+                            {
+                                // Check if theres a third pair.
+                                if (pairFours)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairFives)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else if (pairFours)
+                            {
+                                // Check if theres a third pair.
+                                if (pairFives)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else if (pairFives)
+                            {
+                                // Check if theres a third pair.
+                                if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else
+                            {
+                                // There are not three pairs.
+                            }
+                        }
+                        else if (pairTwos)
+                        {
+                            // Check if theres another pair.
+                            if (pairThrees)
+                            {
+                                // Check if theres a third pair.
+                                if (pairFours)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairFives)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else if (pairFours)
+                            {
+                                // Check if theres a third pair.
+                                if (pairFives)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else if (pairFives)
+                            {
+                                // Check if theres a third pair.
+                                if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else
+                            {
+                                // There are not three pairs.
+                            }
+                        }
+                        else if (pairThrees)
+                        {
+                            // Check if theres another pair.
+                            if (pairFours)
+                            {
+                                // Check if theres a third pair.
+                                if (pairFives)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else if (pairFives)
+                            {
+                                // Check if theres a third pair.
+                                if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else
+                            {
+                                // There are not three pairs.
+                            }
+                        }
+                        else if (pairFours)
+                        {
+                            // Check if theres another pair.
+                            if (pairFives)
+                            {
+                                // Check if theres a third pair.
+                                if (pairSixes)
+                                {
+                                    // Set threePairs to true.
+                                    threePairs = true;
+                                }
+                                else
+                                {
+                                    // There are not three pairs.
+                                }
+                            }
+                            else
+                            {
+                                // There are not three pairs.
+                            }
+                        }
+                        else
+                        {
+                            // There are not three pairs.
+                        }
+
+                        // If there are three pairs.
+                        if (threePairs)
+                        {
+                            // Add 1500 to the pending score for three pairs.
+                            pendingScore = 1500;
+                        }
+                        else
+                        {
+                            // Pending score stays as pending score.
+                        }
+                    }
+
+                    // Message box to tell player to roll again.
+                    MessageBox.Show("You have hot dice! Roll again!");
+                }
             }
 
             /*
             else if (diceKept.Count == 2)
             {
-                
+
             }
             else if (diceKept.Count == 3)
             {
