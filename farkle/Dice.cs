@@ -34,17 +34,9 @@ namespace farkle
         /// <summary>
         /// Method to roll the dice.
         /// </summary>
-        public int RollDice()
+        public void RollDice()
         {
-            // Create instance of random and set roll to random number between 1 and 6.
-            Random rand = new Random();
-            int roll = rand.Next(1, 7);
-
-            // Could possibly change image of die from here.
-            // Could have int parameter called currentDie for the dice being rolled.
-
-            // return the roll.
-            return roll;
+ 
         }
     }
 }

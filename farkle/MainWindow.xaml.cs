@@ -29,18 +29,5 @@ namespace farkle
         {
             InitializeComponent();
         }
-
-        public void DisplayDice()
-        {
-            Dice Die = new Dice();
-
-            // FirstRoll is the valuse for the first die rolled.
-            int fistRoll = Die.RollDice();
-        }
-
-
-
-
-        
     }
 }
