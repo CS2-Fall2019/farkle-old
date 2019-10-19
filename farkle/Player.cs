@@ -16,29 +16,19 @@ namespace farkle
 
     class Player
     {
-        // Playes total score.
+        // Players total score.
         private int score;
 
         // Players score for the current round
         private int pendingScore;
 
-        // Variable for the first die.
-        private Label dieOne;
+        /// <summary>
+        /// The current score for the player.
+        /// </summary>
+        private int currentScore;
 
-        // Variable for the second die.
-        private Label dieTwo;
-
-        // Variable for the three die.
-        private Label dieThree;
-
-        // Variable for the four die.
-        private Label dieFour;
-
-        // Variable for the fifth die.
-        private Label dieFive;
-
-        // Variable for the sixth die.
-        private Label dieSix;
+        // Instance of dice class
+        public Dice currentDie;
 
         /// <summary>
         /// Gets or sets Score.
@@ -58,6 +48,14 @@ namespace farkle
             set { this.pendingScore = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the current score.
+        /// </summary>
+        public int CurrentScore
+        {
+            get => currentScore;
+            set => currentScore = value;
+        }
 
         public int ScoreDice()
         {
@@ -629,11 +627,26 @@ namespace farkle
                         }
                     }
 
-                    // Message box to tell player to roll again.
-                    MessageBox.Show("You have hot dice! Roll again!");
+                    // Message telling the user they can roll again.
+                    MessageBox.Show("Good job buddy, you got hot dice!" + "\n" +
+                                    "You may roll again!");
                 }
             }
 
+            // Set totalScore equal to pendingScore.
+            totalScore = pendingScore;
+
+            // Accumulate currentScore with pendingScore.
+            currentScore += pendingScore;
+
+            if (hotDice)
+            {
+                
+            }
+            else
+            {
+                // End player turn.
+            }
             /*
             else if (diceKept.Count == 2)
             {
