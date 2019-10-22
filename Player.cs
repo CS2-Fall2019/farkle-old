@@ -23,9 +23,57 @@ namespace farkle
         private int pendingScore;
 
         /// <summary>
+        /// Players temporary current score for this round. Can be added to w/ hot dice or lost if farkled.
+        /// </summary>
+        private int tempScore;
+
+        /// <summary>
         /// The current score for the player.
         /// </summary>
         private int currentScore;
+
+        /// <summary>
+        /// The numbered value of the die between 1 and 6.
+        /// </summary>
+        private int[] dieKept = new int[6];
+
+        /// <summary>
+        /// Bool value to hold true if all the dice kept are scorable.
+        /// </summary>
+        private bool validDice = false;
+
+        /// <summary>
+        /// Bool value to hold true if all 6 dice are kept, scorable, and ready for re-roll.
+        /// </summary>
+        private bool hotDice;
+
+        /// <summary>
+        /// Intger value to increment every time the player gets hot dice. Resets on new turn.
+        /// </summary>
+        private int round;
+
+        /// <summary>
+        /// Intger value to increment every time the player gets hot dice. Resets on new turn.
+        /// </summary>
+        private int oldTemp;
+
+        /// <summary>
+        /// Gets or sets validDice.
+        /// </summary>
+        public int OldTemp
+        {
+            get => oldTemp;
+            set => oldTemp = value;
+        }
+
+        /// <summary>
+        /// Get or sets dice value.
+        /// </summary>
+        public int[] DieKept
+        {
+            get { return this.dieKept; }
+            set { this.dieKept = value; }
+        }
 
         // Instance of dice class
         public Dice currentDie;
@@ -40,7 +88,7 @@ namespace farkle
         }
 
         /// <summary>
-        /// Gets or sets Pending Score.
+        /// Gets or sets Pending Score. for specific roll
         /// </summary>
         public int PendingScore
         {
@@ -57,14 +105,54 @@ namespace farkle
             set => currentScore = value;
         }
 
-        public int ScoreDice()
+        /// <summary>
+        /// Gets or sets tempScore. 
+        /// </summary>
+        public int TempScore
+        {
+            get => tempScore;
+            set => tempScore = value;
+        }
+
+        /// <summary>
+        /// Gets or sets validDice.
+        /// </summary>
+        public bool ValidDice
+        {
+            get => validDice;
+            set => validDice = value;
+        }
+
+        /// <summary>
+        /// Gets or sets hotDice.
+        /// </summary>
+        public bool HotDice
+        {
+            get => hotDice;
+            set => hotDice = value;
+        }
+
+        /// <summary>
+        /// Gets or sets round.
+        /// </summary>
+        public int Round
+        {
+            get => round;
+            set => round = value;
+        }
+
+        public void ScoreDice(int[] diceArray)
         {
             // Variable for total score from the dice roll.
             int totalScore = 0;
             // Scoring 
 
             // Set up a list to store the diceKept in.
-            List<int> diceKept = new List<int>();
+            // List<int> diceKept = new List<int>();
+
+            // Set bool valid dice and bool hot dice to false.
+            validDice = false;
+            this.hotDice = false;
 
             // Set up variables to hold the scores for a single 1 or single 5 rolled.
             int die1 = 100;
@@ -79,19 +167,45 @@ namespace farkle
             int sixCounter = 0;
 
             // Set up a bool value to hold true if all 6 dice are kept.
-            bool hotDice = false;
+            //bool hotDice = false;
+            // we are using a field of player to do this
 
-            // todo Set up a bool value to hold true if there are dice that can be scored?
-            // bool scoreableDice = true;
+            // Set up a boolean value to hold true if there is a straight.
+            bool straight = false;
+
+            // Set up bool values to hold true if counters are pairs.
+            bool pairOnes = false;
+            bool pairTwos = false;
+            bool pairThrees = false;
+            bool pairFours = false;
+            bool pairFives = false;
+            bool pairSixes = false;
+
+            // Set up a bool value to hold true if there are three pairs.
+            bool threePairs = false;
+
+            // Set up bool values to hold true if counters are 3.
+            bool threeOnes = false;
+            bool threeTwos = false;
+            bool threeThrees = false;
+            bool threeFours = false;
+            bool threeFives = false;
+            bool threeSixes = false;
+
+            // Set up a bool value to hold true if there are two three of a kinds.
+            bool threeOfAKinds = false;
+
+            // Set up a bool value to hold true if there are dice that can be scored.
+            bool keptDiceScorable = false;
 
             // todo set up a way to tell if there are scoreable dice.
             // todo list of dice that arent being kept.
-            // List<int> rolledDice = new List<int>();
+            List<int> rolledDice = new List<int>();
 
 
             // todo not sure what was going here.
             // If 
-            if (hotDice == false)
+            if (this.HotDice == false)
             {
                 this.pendingScore = 0;
             }
@@ -100,25 +214,53 @@ namespace farkle
 
             }
 
+            // Loop through the dieKept array.
+            for (int index = 0; index < dieKept.Length; index++)
+            {
+                // If the value in each element of dieKept is not 0...
+                if (dieKept[index] > 0)
+                {
+                    // Add the value to a list.
+                    rolledDice.Add(dieKept[index]);
+                }
+            }
+
             // If there is only one dice kept.
-            if (diceKept.Count == 1)
+            if (rolledDice.Count == 1)
             {
                 // If the dice kept is a 1.
-                if (diceKept[0] == 1)
+                if (rolledDice[0] == 1)
                 {
                     // Add 100 to pendingScore.
                     pendingScore = die1;
+
+                    // Increment the oneCounter.
+                    oneCounter++;
+
+                    // Set validDice to true.
+                    validDice = true;
                 }
-                else
+                else if (rolledDice[0] == 5)
                 {
                     // The dice kept is a 5. Add 50 to the pendingScore.
                     pendingScore = die5;
+
+                    // Increment the fiveCounter.
+                    fiveCounter++;
+
+                    // Set validDice to true.
+                    validDice = true;
+                }
+                else
+                {
+                    // The dice kept is not scoreable.
+                    MessageBox.Show("The die you kept is not scorable.");
                 }
             }
             else
             {
                 // Loop through the diceKept list and increment the counters of each die rolled.
-                foreach (int die in diceKept)
+                foreach (int die in rolledDice)
                 {
                     // If the current die is a 1.
                     if (die == 1)
@@ -153,29 +295,35 @@ namespace farkle
                     }
                 }
 
-                // Loop through the oneCounter and adjust scores.
-                for (int i = 0; i <= oneCounter; i++)
+                // todo right here check if there are scorable dice by comparing the one/fiveCounters and 
+                // the other counters compared to the total counter?
+
+                // If there are ones to be scored.
+                if (oneCounter > 0)
                 {
                     // If there are less than 3 ones rolled.
-                    if (i < 3)
+                    if (oneCounter < 3)
                     {
                         // Add 100 for each one rolled.
-                        pendingScore += 100;
+                        pendingScore += oneCounter * 100;
                     }
                     else
                     {
                         // If there are 3 or more ones rolled.
-                        if (i == 3)
+                        if (oneCounter == 3)
                         {
                             // If oneCounter is 3 add 1000.
                             pendingScore += 1000;
+
+                            // Set threeOnes to true;
+                            threeOnes = true;
                         }
-                        else if (i == 4)
+                        else if (oneCounter == 4)
                         {
                             // If oneCounter is 4 add 2000.
                             pendingScore += 2000;
                         }
-                        else if (i == 5)
+                        else if (oneCounter == 5)
                         {
                             // If oneCounter is 5 add 4000.
                             pendingScore += 4000;
@@ -187,22 +335,29 @@ namespace farkle
                         }
                     }
                 }
+                else
+                {
+                    // Pending score remains the same.
+                }
 
-                // Loop through the twoCounter and adjust scores.
-                for (int i = 0; i <= twoCounter; i++)
+                // If there are twos to be scored.
+                if (twoCounter >= 3)
                 {
                     // If there are 3 or more twos rolled.
-                    if (i == 3)
+                    if (twoCounter == 3)
                     {
                         // If twoCounter is 3 add 200.
                         pendingScore = 200;
+
+                        // Set threeTwos to true;
+                        threeTwos = true;
                     }
-                    else if (i == 4)
+                    else if (twoCounter == 4)
                     {
                         // If twoCounter is 4 add 400.
                         pendingScore = 400;
                     }
-                    else if (i == 5)
+                    else if (twoCounter == 5)
                     {
                         // If twoCounter is 5 add 800.
                         pendingScore = 800;
@@ -213,22 +368,29 @@ namespace farkle
                         pendingScore = 1600;
                     }
                 }
+                else
+                {
+                    // Pending score remains the same.
+                }
 
-                // Loop through the threeCounter and adjust scores.
-                for (int i = 0; i <= threeCounter; i++)
+                // If there are threes to be scored.
+                if (threeCounter >= 3)
                 {
                     // If there are 3 or more threes rolled.
-                    if (i == 3)
+                    if (threeCounter == 3)
                     {
                         // If threeCounter is 3 add 300.
                         pendingScore += 300;
+
+                        // Set threeThrees to true;
+                        threeThrees = true;
                     }
-                    else if (i == 4)
+                    else if (threeCounter == 4)
                     {
                         // If threeCounter is 4 add 600.
                         pendingScore += 600;
                     }
-                    else if (i == 5)
+                    else if (threeCounter == 5)
                     {
                         // If threeCounter is 5 add 1200.
                         pendingScore += 1200;
@@ -239,22 +401,29 @@ namespace farkle
                         pendingScore += 2400;
                     }
                 }
+                else
+                {
+                    // Pending score remains the same.
+                }
 
-                // Loop through the fourCounter and adjust scores.
-                for (int i = 0; i <= fourCounter; i++)
+                // If there are fours to be scored.
+                if (fourCounter >= 3)
                 {
                     // If there are 3 or more fours rolled.
-                    if (i == 3)
+                    if (fourCounter == 3)
                     {
                         // If fourCounter is 3 add 400.
                         pendingScore += 400;
+
+                        // Set threeFours to true;
+                        threeFours = true;
                     }
-                    else if (i == 4)
+                    else if (fourCounter == 4)
                     {
                         // If fourCounter is 4 add 800.
                         pendingScore += 800;
                     }
-                    else if (i == 5)
+                    else if (fourCounter == 5)
                     {
                         // If fourCounter is 5 add 1600.
                         pendingScore += 1600;
@@ -265,30 +434,37 @@ namespace farkle
                         pendingScore += 3200;
                     }
                 }
+                else
+                {
+                    // Pending score remains the same.
+                }
 
-                // Loop through the fiveCounter and adjust scores.
-                for (int i = 0; i <= fiveCounter; i++)
+                // If there are fivess to be scored.
+                if (fiveCounter > 0)
                 {
                     // If there are less than 3 fives rolled.
-                    if (i < 3)
+                    if (fiveCounter < 3)
                     {
                         // Add 50 for each 5 rolled.
-                        pendingScore += 50;
+                        pendingScore += fiveCounter * 50;
                     }
                     else
                     {
                         // If there are 3 or more fives rolled.
-                        if (i == 3)
+                        if (fiveCounter == 3)
                         {
                             // If fiveCounter is 3 add 500.
                             pendingScore += 500;
+
+                            // Set threeFives to true;
+                            threeFives = true;
                         }
-                        else if (i == 4)
+                        else if (fiveCounter == 4)
                         {
                             // If fiveCounter is 4 add 1000.
                             pendingScore += 1000;
                         }
-                        else if (i == 5)
+                        else if (fiveCounter == 5)
                         {
                             // If fiveCounter is 5 add 2000.
                             pendingScore += 2000;
@@ -300,22 +476,29 @@ namespace farkle
                         }
                     }
                 }
+                else
+                {
+                    // Pending score remains the same.
+                }
 
-                // Loop through the sixCounter and adjust scores.
-                for (int i = 0; i <= sixCounter; i++)
+                // If there are sixes to be scored.
+                if (sixCounter >= 3)
                 {
                     // If there are 3 or more sixes rolled.
-                    if (i == 3)
+                    if (sixCounter == 3)
                     {
                         // If sixCounter is 3 add 600.
                         pendingScore += 600;
+
+                        // Set threeSixes to true;
+                        threeSixes = true;
                     }
-                    else if (i == 4)
+                    else if (sixCounter == 4)
                     {
                         // If sixCounter is 4 add 1200.
                         pendingScore += 1200;
                     }
-                    else if (i == 5)
+                    else if (sixCounter == 5)
                     {
                         // If sixCounter is 5 add 2400.
                         pendingScore += 2400;
@@ -326,23 +509,16 @@ namespace farkle
                         pendingScore += 4800;
                     }
                 }
+                else
+                {
+                    // Pending score remains the same.
+                }
 
                 // Check to see if the player rolled a straight or three pairs.
-                if (diceKept.Count == 6)
+                if (rolledDice.Count == 6)
                 {
                     // Set hotDice to true.
-                    hotDice = true;
-
-                    // Set up bool values to hold true if counters are pairs.
-                    bool pairOnes = false;
-                    bool pairTwos = false;
-                    bool pairThrees = false;
-                    bool pairFours = false;
-                    bool pairFives = false;
-                    bool pairSixes = false;
-
-                    // Set up a bool value to hold true if there are three pairs.
-                    bool threePairs = false;
+                    this.HotDice = true;
 
                     // Check for pairs.
                     // If theres a pair of ones.
@@ -391,6 +567,9 @@ namespace farkle
                     if (oneCounter == 1 && twoCounter == 1 && threeCounter == 1 &&
                         fourCounter == 1 && fiveCounter == 1 && sixCounter == 1)
                     {
+                        // Set bool straight to true.
+                        straight = true;
+
                         // Add 3000 to the pending score for a straight.
                         pendingScore = 3000;
                     }
@@ -627,26 +806,234 @@ namespace farkle
                         }
                     }
 
-                    // Message telling the user they can roll again.
-                    MessageBox.Show("Good job buddy, you got hot dice!" + "\n" +
-                                    "You may roll again!");
+                    if (!threePairs)
+                    {
+                        // Check for 2 3-of-a-kinds.
+                        if (threeOnes)
+                        {
+                            if (threeTwos)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeThrees)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeFours)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeFives)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeSixes)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else
+                            {
+                                // Theres not 2 3-of-a-kinds.
+                            }
+                        }
+                        else if (threeTwos)
+                        {
+                            if (threeThrees)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeFours)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeFives)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeSixes)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else
+                            {
+                                // Theres not 2 3-of-a-kinds.
+                            }
+                        }
+                        else if (threeThrees)
+                        {
+                            if (threeFours)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeFives)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeSixes)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else
+                            {
+                                // Theres not 2 3-of-a-kinds.
+                            }
+                        }
+                        else if (threeFours)
+                        {
+                            if (threeFives)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else if (threeSixes)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else
+                            {
+                                // Theres not 2 3-of-a-kinds.
+                            }
+                        }
+                        else if (threeFives)
+                        {
+                            if (threeSixes)
+                            {
+                                // There is 2 3-of-a-kinds.
+                                // Set threeOfAKinds to true.
+                                threeOfAKinds = true;
+                            }
+                            else
+                            {
+                                // Theres not 2 3-of-a-kinds.
+                            }
+                        }
+                        else
+                        {
+                            // There is not 2 3-of-a-kinds.
+                        }
+                    }
+                    else
+                    {
+                        // There is not three pairs and not 2 3-of-a-kinds
+                    }
                 }
             }
 
-            // Set totalScore equal to pendingScore.
-            totalScore = pendingScore;
 
-            // Accumulate currentScore with pendingScore.
-            currentScore += pendingScore;
-
-            if (hotDice)
+            // Check to make sure the dice kept are scorable.
+            if (twoCounter >= 3 && twoCounter + oneCounter + fiveCounter == rolledDice.Count)
             {
-                
+                // Set scorable dice to true.
+                keptDiceScorable = true;
+            }
+            else if (threeCounter >=3 && threeCounter + oneCounter + fiveCounter == rolledDice.Count)
+            {
+                // Set scorable dice to true.
+                keptDiceScorable = true;
+            }
+            else if(fourCounter >= 3 && fourCounter + oneCounter + fiveCounter == rolledDice.Count)
+            {
+                // Set scorable dice to true.
+                keptDiceScorable = true;
+            }
+            else if (sixCounter >= 3 && sixCounter + oneCounter + fiveCounter == rolledDice.Count)
+            {
+                // Set scorable dice to true.
+                keptDiceScorable = true;
             }
             else
             {
-                // End player turn.
+                // Some of the dice are not scorable.
+                keptDiceScorable = false;
             }
+
+            if (straight || threePairs || threeOfAKinds || keptDiceScorable || (oneCounter + fiveCounter == rolledDice.Count))
+            {
+                if (rolledDice.Count == 6)
+                {
+                    // Set hot dice to true.
+                    this.HotDice = true;
+                }
+
+                // Dice are valid.
+                // Set validDice to true.
+                validDice = true;
+
+                // Keep the scores sepererated, roll to roll.
+                // tempScore holds the total pending score, where as the pendingScore is for each seperate roll.
+                // ex. During the first roll only a 5 is kept (50pts). The second roll three 5's are kept, we don't want the
+                // value of the pending score to be 2000 when it should only be 550.
+
+                //if (tempScore > pendingScore)
+                //{
+                //    tempScore = tempScore - pendingScore;
+                //}
+                //else
+                //{
+                //    tempScore = pendingScore - tempScore;
+                //}
+
+                // Set the tempScore field as pending score.
+                //currentScore += tempScore;
+                
+                /*
+                if (round == 0)
+                {
+                    tempScore += pendingScore;
+                    oldTemp = tempScore;
+                    round++;
+                }
+                else
+                {
+                    // Add new score.
+                    tempScore += (pendingScore - oldTemp);                    
+                }
+                */
+                
+                tempScore += pendingScore;
+
+
+                
+                // Reset pending score to 0.
+                pendingScore = 0;
+            }
+            else
+            {
+                // Dice are not valid.
+                // MessageBox.Show("Some of the dice you kept are not scorable.");
+                validDice = false;
+            }
+
+            // Clear rolledDice.
+            rolledDice.Clear();
+
             /*
             else if (diceKept.Count == 2)
             {
@@ -695,7 +1082,16 @@ namespace farkle
 
             // Three pair = 1500pts
 
-            return totalScore;
+            // todo return tempScore???
+
+            for(int i = 0; i < 6; i++)
+            {
+                if (DieKept[i] != 0)
+                {
+                    DieKept[i] = 0;
+                }
+            }
+
         }
     }
 }
